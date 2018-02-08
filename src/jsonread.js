@@ -1,5 +1,11 @@
 const fs = require('fs');
 
+const remote = require('electron').remote;
+const dialog = remote.dialog;
+
+/**
+ * JSONファイルの読み込みを行う。
+ */
 function read() {
     var tbody = document.getElementById("resultListBody");
     while( tbody.rows[0] ) {
@@ -32,5 +38,18 @@ function read() {
                 });
             }
         });
+    });
+}
+
+/**
+ * ディレクトリ選択のダイアログを表示する。
+ */
+function selectDirectory() {
+    dialog.showOpenDialog(null, {
+        properties: ['openDirectory'],
+        title: 'フォルダ(単独選択)',
+        defaultPath: '.'
+    }, (folderNames) => {
+        document.getElementById("dirpath").value = folderNames[0];
     });
 }
