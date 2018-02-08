@@ -1,0 +1,5 @@
+@charset "utf-8";
+
+table#resultList td, table#resultList th {
+    border: solid 1px #000000;
+}

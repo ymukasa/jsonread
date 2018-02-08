@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>jsonread</title>
+  <script src="jsonread.js"></script>
+  <link rel="stylesheet" type="text/css" href="jsonread.css" >
+</head>
+<body>
+  jsonファイル格納ディレクトリパス：<br />
+  <input type="text" value="" id="dirpath" style="width:600px;" /><br /><br />
+  <input type="button" value="読み込み" id="execButton" onclick="read();" /><br /><br />
+  <table id="resultList">
+      <thead>
+          <th>
+            ファイル名
+          </th>
+        <th>
+          id
+        </th>
+        <th>
+          論理名(name)
+        </th>
+        <th>
+          物理名(physicalName)
+        </th>
+      </thead>
+      <tbody id="resultListBody">
+
+      </tbody>
+  </table>
+</body>
+</html>
