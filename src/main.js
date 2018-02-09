@@ -19,7 +19,7 @@ app.on('ready', function() {
   Menu.setApplicationMenu(null);
 
   // メイン画面の表示。ウィンドウの幅、高さを指定できる
-  mainWindow = new BrowserWindow({width: 800, height: 300, resizable: true});
+  mainWindow = new BrowserWindow({width: 800, height: 500, resizable: true});
   mainWindow.loadURL('file://' + __dirname + '/index.html');
 
   // 開発者ツールの表示
