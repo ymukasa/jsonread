@@ -1,6 +1,6 @@
 const fs = require('fs');
-const remote = require('electron').remote;
-const dialog = remote.dialog;
+const electron = require('electron');
+const dialog = electron.remote.dialog;
 
 /**
  * JSONファイルの読み込みを行う。
@@ -29,7 +29,7 @@ function createList() {
 function clearTable() {
     var tbody = document.getElementById("resultListBody");
     while( tbody.rows[0] ) {
-        tbody.deleteRow( 0 );
+        tbody.deleteRow(0);
     }
 }
 
