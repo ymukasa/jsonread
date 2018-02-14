@@ -1,6 +1,7 @@
 const fs = require('fs');
 const electron = require('electron');
 const dialog = electron.remote.dialog;
+const clipboard = electron.clipboard;
 
 /**
  * JSONファイルの読み込みを行う。
@@ -48,10 +49,28 @@ function outputSeparatValue(separator, extension) {
         tsvContents += "\n";
         tsvContents += "\"" + fileName + "\"" + separator + "\"" + jsonData.id + "\"" + separator + "\"" + jsonData.name + "\"" + separator + "\"" + jsonData.physicalName + "\"";
     };
-    var outputTsvContents = () => {
+    var outputContents = () => {
         fileOutput(tsvContents, extension);
     };
-    readJson(createTsvContents, outputTsvContents);
+    readJson(createTsvContents, outputContents);
+}
+
+function copyTsv() {
+    copySeparatValue("\t");
+}
+
+function copySeparatValue(separator) {
+    var tsvContents = "\"ファイル名\"" + separator + "\"ID\"" + separator + "\"論理名(name)\"" + separator + "\"物理名(physicalName)\"";
+    var createTsvContents = (filePath, fileName, fileContents) => {
+        var jsonData = JSON.parse(fileContents);
+        tsvContents += "\n";
+        tsvContents += "\"" + fileName + "\"" + separator + "\"" + jsonData.id + "\"" + separator + "\"" + jsonData.name + "\"" + separator + "\"" + jsonData.physicalName + "\"";
+    };
+    var copyContents = () => {
+        clipboard.writeText(tsvContents);
+        dialog.showMessageBox(null, {message: '終わったよ'});
+    };
+    readJson(createTsvContents, copyContents);
 }
 
 /**
