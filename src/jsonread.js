@@ -34,43 +34,74 @@ function clearTable() {
     }
 }
 
+/**
+ * tsv形式の文字コンテンツをファイルに出力する。
+ */
 function outputTsv() {
     outputSeparatValue("\t", "tsv");
 }
 
+/**
+ * csv形式の文字コンテンツをファイルに出力する。
+ */
 function outputCsv() {
     outputSeparatValue(",", "csv");
 }
 
+/**
+ * 画面上で指定されたディレクトリ内のjsonファイルを読み込んで、ファイル名、ID、論理名、物理名を
+ * separatorで区切られた文字コンテンツにしてファイルに出力する。
+ * ファイル名、ID、論理名、物理名の各要素は全てダブルクォートで囲んだ文字列になる。（ただし、ダブルクォートのエスケープ処理は行っていない）
+ * separatorにカンマが指定されればcsv, タブが指定されればtsvになる。
+ * @param {string} separator 文字コンテンツの区切り文字。
+ * @param {string} extension 出力するファイルの拡張子。
+ */
 function outputSeparatValue(separator, extension) {
-    var tsvContents = "\"ファイル名\"" + separator + "\"ID\"" + separator + "\"論理名(name)\"" + separator + "\"物理名(physicalName)\"";
-    var createTsvContents = (filePath, fileName, fileContents) => {
+    var contents = "\"ファイル名\"" + separator + "\"ID\"" + separator + "\"論理名(name)\"" + separator + "\"物理名(physicalName)\"";
+    var createContents = (filePath, fileName, fileContents) => {
         var jsonData = JSON.parse(fileContents);
-        tsvContents += "\n";
-        tsvContents += "\"" + fileName + "\"" + separator + "\"" + jsonData.id + "\"" + separator + "\"" + jsonData.name + "\"" + separator + "\"" + jsonData.physicalName + "\"";
+        contents += "\n";
+        contents += "\"" + fileName + "\"" + separator + "\"" + jsonData.id + "\"" + separator + "\"" + jsonData.name + "\"" + separator + "\"" + jsonData.physicalName + "\"";
     };
     var outputContents = () => {
-        fileOutput(tsvContents, extension);
+        fileOutput(contents, extension);
     };
-    readJson(createTsvContents, outputContents);
+    readJson(createContents, outputContents);
 }
 
+/**
+ * tsv形式の文字コンテンツをクリップボードにコピーする。
+ */
 function copyTsv() {
     copySeparatValue("\t");
 }
 
+/**
+ * csv形式の文字コンテンツをクリップボードにコピーする。
+ */
+function copyCsv() {
+    copySeparatValue(",");
+}
+
+/**
+ * 画面上で指定されたディレクトリ内のjsonファイルを読み込んで、ファイル名、ID、論理名、物理名を
+ * separatorで区切られた文字コンテンツにしてクリップボードにコピーする。
+ * ファイル名、ID、論理名、物理名の各要素は全てダブルクォートで囲んだ文字列になる。（ただし、ダブルクォートのエスケープ処理は行っていない）
+ * separatorにカンマが指定されればcsv, タブが指定されればtsvになる。
+ * @param {string} separator 文字コンテンツの区切り文字。
+ */
 function copySeparatValue(separator) {
-    var tsvContents = "\"ファイル名\"" + separator + "\"ID\"" + separator + "\"論理名(name)\"" + separator + "\"物理名(physicalName)\"";
-    var createTsvContents = (filePath, fileName, fileContents) => {
+    var contents = "\"ファイル名\"" + separator + "\"ID\"" + separator + "\"論理名(name)\"" + separator + "\"物理名(physicalName)\"";
+    var createContents = (filePath, fileName, fileContents) => {
         var jsonData = JSON.parse(fileContents);
-        tsvContents += "\n";
-        tsvContents += "\"" + fileName + "\"" + separator + "\"" + jsonData.id + "\"" + separator + "\"" + jsonData.name + "\"" + separator + "\"" + jsonData.physicalName + "\"";
+        contents += "\n";
+        contents += "\"" + fileName + "\"" + separator + "\"" + jsonData.id + "\"" + separator + "\"" + jsonData.name + "\"" + separator + "\"" + jsonData.physicalName + "\"";
     };
     var copyContents = () => {
-        clipboard.writeText(tsvContents);
+        clipboard.writeText(contents);
         dialog.showMessageBox(null, {message: '終わったよ'});
     };
-    readJson(createTsvContents, copyContents);
+    readJson(createContents, copyContents);
 }
 
 /**
@@ -103,14 +134,15 @@ function readJson(callbackFileRead, afterAllFileRead) {
 /**
  * 指定された contents をファイルに出力する。
  * ファイル選択ダイアログを表示して出力するファイルを選択する。
- * @param {any} contents 
+ * @param {any} contents 出力する内容
+ * @param {string} 出力するファイルの拡張子
  */
 function fileOutput(contents, extension) {
     dialog.showSaveDialog(null, {
         title: '保存',
         defaultPath: '.',
         filters: [
-            {name: '-', extensions: [extension]},
+            {name: extension + 'ファイル', extensions: [extension]},
         ]
     }, (savedFileName) => {
         fs.writeFileSync(savedFileName, contents, "utf8");
@@ -119,7 +151,7 @@ function fileOutput(contents, extension) {
 }
 
 /**
- * ディレクトリ選択のダイアログを表示する。
+ * ダイアログ表示して、処理するディレクトリを選択⇒設定する。
  */
 function selectDirectory() {
     dialog.showOpenDialog(null, {
