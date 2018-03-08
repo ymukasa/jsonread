@@ -15,10 +15,12 @@ function createList() {
         var td2 = tr.insertCell(-1);
         var td3 = tr.insertCell(-1);
         var td4 = tr.insertCell(-1);
+        var td5 = tr.insertCell(-1);
         td1.innerHTML = fileName;
         td2.innerHTML = jsonData.id;
         td3.innerHTML = jsonData.name;
         td4.innerHTML = jsonData.physicalName;
+        td5.innerHTML = jsonData.description;
     };
     clearTable();
     readJson(createList);
@@ -57,11 +59,11 @@ function outputCsv() {
  * @param {string} extension 出力するファイルの拡張子。
  */
 function outputSeparatValue(separator, extension) {
-    var contents = "\"ファイル名\"" + separator + "\"ID\"" + separator + "\"論理名(name)\"" + separator + "\"物理名(physicalName)\"";
+    var contents = "\"ファイル名\"" + separator + "\"ID\"" + separator + "\"論理名(name)\"" + separator + "\"物理名(physicalName)\"" + separator + "\"説明(description)\"";
     var createContents = (filePath, fileName, fileContents) => {
         var jsonData = JSON.parse(fileContents);
         contents += "\n";
-        contents += "\"" + fileName + "\"" + separator + "\"" + jsonData.id + "\"" + separator + "\"" + jsonData.name + "\"" + separator + "\"" + jsonData.physicalName + "\"";
+        contents += "\"" + fileName + "\"" + separator + "\"" + jsonData.id + "\"" + separator + "\"" + jsonData.name + "\"" + separator + "\"" + jsonData.physicalName + "\"" + separator + "\"" + jsonData.description + "\"";
     };
     var outputContents = () => {
         fileOutput(contents, extension);
@@ -91,11 +93,11 @@ function copyCsv() {
  * @param {string} separator 文字コンテンツの区切り文字。
  */
 function copySeparatValue(separator) {
-    var contents = "\"ファイル名\"" + separator + "\"ID\"" + separator + "\"論理名(name)\"" + separator + "\"物理名(physicalName)\"";
+    var contents = "\"ファイル名\"" + separator + "\"ID\"" + separator + "\"論理名(name)\"" + separator + "\"物理名(physicalName)\"" + separator + "\"説明(description)\"";
     var createContents = (filePath, fileName, fileContents) => {
         var jsonData = JSON.parse(fileContents);
         contents += "\n";
-        contents += "\"" + fileName + "\"" + separator + "\"" + jsonData.id + "\"" + separator + "\"" + jsonData.name + "\"" + separator + "\"" + jsonData.physicalName + "\"";
+        contents += "\"" + fileName + "\"" + separator + "\"" + jsonData.id + "\"" + separator + "\"" + jsonData.name + "\"" + separator + "\"" + jsonData.physicalName + "\"" + separator + "\"" + jsonData.description + "\"";
     };
     var copyContents = () => {
         clipboard.writeText(contents);
