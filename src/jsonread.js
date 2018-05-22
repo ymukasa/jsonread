@@ -86,6 +86,56 @@ function copyCsv() {
 }
 
 /**
+ * QueryTypeに定義されているクエリを組み立ててクリップボードにコピーする。
+ */
+function copyQuery() {
+    var contents = "";
+    var createContents = (filePath, fileName, fileContents) => {
+
+        if (fileName.startsWith("QueryType") === false) {
+            return;
+        }
+
+        // select 句
+        var jsonData = JSON.parse(fileContents);
+        contents += "\n";
+        contents += "-- " + fileName;
+
+        contents += "\nselect ";
+        for (var i = 0; i < jsonData.criteria.header.headerColumnList.length; i++) {
+            var headerColumn = jsonData.criteria.header.headerColumnList[i];
+            if (i > 0) {
+                contents += ", ";
+            }
+            contents += headerColumn.expression + " as " + headerColumn.name;
+        }
+
+        // from 句、where 句
+        contents += " " + jsonData.sql + " ";
+
+        // order by 句
+        if (jsonData.criteria.order.orderColumnList.length > 0) {
+            contents += " order by ";
+            for (var i = 0; i < jsonData.criteria.order.orderColumnList.length; i++) {
+                var orderColumn = jsonData.criteria.order.orderColumnList[i];
+                if (i > 0) {
+                    contents += ", ";
+                }
+                contents += orderColumn.name;
+            }
+        }
+
+        contents += ";";
+    };
+
+    var copyContents = () => {
+        clipboard.writeText(contents);
+        dialog.showMessageBox(null, {message: '終わったよ'});
+    };
+    readJson(createContents, copyContents);
+}
+
+/**
  * 画面上で指定されたディレクトリ内のjsonファイルを読み込んで、ファイル名、ID、論理名、物理名を
  * separatorで区切られた文字コンテンツにしてクリップボードにコピーする。
  * ファイル名、ID、論理名、物理名の各要素は全てダブルクォートで囲んだ文字列になる。（ただし、ダブルクォートのエスケープ処理は行っていない）
