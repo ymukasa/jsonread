@@ -98,7 +98,7 @@ function copyQuery() {
 
         // select 句
         var jsonData = JSON.parse(fileContents);
-        contents += "\n";
+        contents += "\n\n";
         contents += "-- " + fileName + " | " + jsonData.description;
 
         contents += "\nselect ";
@@ -116,9 +116,9 @@ function copyQuery() {
         // order by 句
         if (jsonData.criteria.order.orderColumnList.length > 0) {
             contents += " order by ";
-            for (var i = 0; i < jsonData.criteria.order.orderColumnList.length; i++) {
-                var orderColumn = jsonData.criteria.order.orderColumnList[i];
-                if (i > 0) {
+            for (var j = 0; j < jsonData.criteria.order.orderColumnList.length; j++) {
+                var orderColumn = jsonData.criteria.order.orderColumnList[j];
+                if (j > 0) {
                     contents += ", ";
                 }
                 contents += orderColumn.name;
