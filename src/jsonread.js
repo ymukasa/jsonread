@@ -99,7 +99,7 @@ function copyQuery() {
         // select 句
         var jsonData = JSON.parse(fileContents);
         contents += "\n";
-        contents += "-- " + fileName;
+        contents += "-- " + fileName + " | " + jsonData.description;
 
         contents += "\nselect ";
         for (var i = 0; i < jsonData.criteria.header.headerColumnList.length; i++) {
